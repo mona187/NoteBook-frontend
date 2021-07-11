@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import NoteForm from "./NoteForm";
 import { AddButtonStyled } from "../styles";
+import { observer } from "mobx-react";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NotesTab() {
+const NotesTab = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -107,4 +108,6 @@ export default function NotesTab() {
       </TabPanel>
     </div>
   );
-}
+};
+
+export default observer(NotesTab);

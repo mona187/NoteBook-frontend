@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import NotesTab from "./NotesTab";
 import { AddButtonStyled } from "../styles";
+import notebookStore from "../stores/notebookStore";
+import { observer } from "mobx-react";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,11 +55,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NotebooksTab() {
+const NotebooksTab = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   //map to Tab components (title) and TabPanel components (content)
+  const notebooksListTabs = notebookStore.notebooks.map((notebook) => (
+    <Tab label={notebook.name} {...a11yProps(notebook.id)} />
+  ));
+
+  const notebooksListTabPanels = notebookStore.notebooks.map((notebook) => (
+    <TabPanel value={value} index={notebook.id}>
+      <NotesTab />
+    </TabPanel>
+  ));
 
   const handleChange = (event, newValue) => {
     setValue(newValue); //new value = selected index
@@ -75,16 +86,18 @@ export default function NotebooksTab() {
         style={{ marginRight: -80 }}
         TabIndicatorProps={{ style: { background: "#54E454" } }}
       >
-        <Tab label="Notebook 1" {...a11yProps(0)} />
+        {/* <Tab label="Notebook 1" {...a11yProps(0)} />
         <Tab label="Notebook 2" {...a11yProps(1)} />
         <Tab label="Notebook 3" {...a11yProps(2)} />
         <Tab label="Notebook 4" {...a11yProps(3)} />
         <Tab label="Notebook 5" {...a11yProps(4)} />
         <Tab label="Notebook 6" {...a11yProps(5)} />
-        <Tab label="Notebook 7" {...a11yProps(6)} />
+        <Tab label="Notebook 7" {...a11yProps(6)} /> */}
+        {notebooksListTabs}
         <AddButtonStyled> + add notebook</AddButtonStyled>
       </Tabs>
-      <TabPanel value={value} index={0}>
+      {notebooksListTabPanels}
+      {/* <TabPanel value={value} index={0}>
         <NotesTab />
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -104,7 +117,9 @@ export default function NotebooksTab() {
       </TabPanel>
       <TabPanel value={value} index={6}>
         <NotesTab />
-      </TabPanel>
+      </TabPanel> */}
     </div>
   );
-}
+};
+
+export default observer(NotebooksTab);
