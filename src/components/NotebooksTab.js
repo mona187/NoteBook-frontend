@@ -66,7 +66,7 @@ const NotebooksTab = () => {
 
   const notebooksListTabPanels = notebookStore.notebooks.map((notebook) => (
     <TabPanel value={value} index={notebook.id}>
-      <NotesTab />
+      <NotesTab notebook={notebook} />
     </TabPanel>
   ));
 

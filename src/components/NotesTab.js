@@ -8,7 +8,7 @@ import Box from "@material-ui/core/Box";
 import NoteForm from "./NoteForm";
 import { AddButtonStyled } from "../styles";
 import { observer } from "mobx-react";
-
+import noteStore from "../stores/noteStore";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -54,9 +54,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NotesTab = () => {
+const NotesTab = (props) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const notes = props.notebook.notes.map((note) =>
+    noteStore.getnoteById(note.id)
+  );
+  const noteListTabs = notes.map((note) => (
+    <Tab label={note.name} {...a11yProps(note.id)} />
+  ));
+
+  const noteListTabPanels = notes.map((note) => (
+    <TabPanel value={value} index={note.id}>
+      <NotesTab note={note} />
+    </TabPanel>
+  ));
 
   //map to Tab components (title) and TabPanel components (content)
 
@@ -76,16 +88,18 @@ const NotesTab = () => {
         style={{ marginRight: -50, marginTop: -80 }}
         TabIndicatorProps={{ style: { background: "#FFC628" } }}
       >
-        <Tab label="Note 1" {...a11yProps(0)} />
+        {/* <Tab label="Note 1" {...a11yProps(0)} />
         <Tab label="Note 2" {...a11yProps(1)} />
         <Tab label="Note 3" {...a11yProps(2)} />
         <Tab label="Note 4" {...a11yProps(3)} />
         <Tab label="Note 5" {...a11yProps(4)} />
         <Tab label="Note 6" {...a11yProps(5)} />
-        <Tab label="Note 7" {...a11yProps(6)} />
+        <Tab label="Note 7" {...a11yProps(6)} /> */}
+        {noteListTabs}
         <AddButtonStyled> + add note</AddButtonStyled>
       </Tabs>
-      <TabPanel value={value} index={0}>
+      {noteListTabPanels}
+      {/* <TabPanel value={value} index={0}>
         <NoteForm></NoteForm>
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -105,7 +119,7 @@ const NotesTab = () => {
       </TabPanel>
       <TabPanel value={value} index={6}>
         <NoteForm></NoteForm>
-      </TabPanel>
+      </TabPanel> */}
     </div>
   );
 };

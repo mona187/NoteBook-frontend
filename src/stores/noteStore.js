@@ -38,7 +38,7 @@ class NoteStore {
         formData
       );
       this.notes.push(response.data);
-      brand.notes.push({ id: response.data.id });
+      notebook.notes.push({ id: response.data.id });
     } catch (error) {
       console.error(error);
     }
@@ -62,7 +62,7 @@ class NoteStore {
     }
   };
 
-  getNoteById = (noteID) => this.products.find((note) => note.id === noteID);
+  getNoteById = (noteID) => this.notes.find((note) => note.id === noteID);
 }
 
 const noteStore = new NoteStore();
